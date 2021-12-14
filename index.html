@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+  <title>TP-Link Router Config Editor</title>
+  <link rel="stylesheet" href="./index.css" type="text/css">
+</link>
+</head>
+
+<body>
+  <header>
+    <h1>TP-Link Router Config Editor</h1>
+    <div>
+      <button id="IMPORT">Import</button>
+      <button id="EXPORT">Export</button>
+      <button id="DISCARD">Discard</button>
+      <input id="FILE" type="file" accept=".bin" autocomplete="off" hidden />
+    </div>
+  </header>
+  <main>
+    <textarea 
+        id="RESULT"
+        placeholder="Import a configuration file and we'll show it here."
+        autocomplete="off"
+    ></textarea>
+  </main>
+  <script src="./vendor/crypto-js.js"></script>
+  <script type="module" src="./index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #eee;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,"Segoe UI","Ubuntu","Roboto","Noto Sans","Droid Sans",sans-serif;
+  font-size: 16px;
+  background: inherit;
+}
+
+body > * {
+  width: 100%;
+  max-width: 1024px;
+}
+
+button {
+  font-size: inherit;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+header h1 {
+  display: inline;
+  margin: 0;
+  flex-grow: 1;
+  font-size: 1.5em;
+}
+
+header > div {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 8px;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+main {
+  flex-grow: 1;
+  margin-bottom: 16px;
+}
+
+textarea {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-size: 16px;
+  font-family: ui-monospace,"Cascadia Mono","Segoe UI Mono","Ubuntu Mono","Roboto Mono",Menlo,Monaco,Consolas,monospace;
+  padding: 16px;
+  margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    filter: invert(80%);
+  }
+}
