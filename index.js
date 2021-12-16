@@ -389,7 +389,6 @@ const key = CryptoJS.enc.Hex.parse('478da50bf9e3d2cf')
 const importButton = document.getElementById("IMPORT")
 const importInput = document.getElementById("FILE")
 const exportButton = document.getElementById("EXPORT")
-const discardButton = document.getElementById("DISCARD")
 const resultTextArea = document.getElementById("RESULT")
 const littleEndianCheckbox = document.getElementById("LITTLE_ENDIAN")
 
@@ -411,17 +410,6 @@ importButton.addEventListener('click', () => {
 importInput.addEventListener('change', async (e) => {
   e.preventDefault()
   await handleImportEvent(importInput.files[0])
-})
-
-discardButton.addEventListener('click', () => {
-  if (!resultTextArea.value) {
-    alert('Nothing to discard.')
-    return
-  }
-  if (!confirm('Are you sure you want to discard your changes?')) {
-    return
-  }
-  resultTextArea.value = ''
 })
 
 resultTextArea.addEventListener('drop', async (e) => {
