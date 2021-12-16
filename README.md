@@ -3,7 +3,7 @@
 A web interface to edit TP-Link Router Config export files (typically named
 `config.bin`).
 
-[Visit the website](https://jahed.github.io/tplink-config-editor/).
+[Visit the website](https://jahed.github.io/tp-link-config-editor/).
 
 Tested on an
 [MR600v2](https://www.tp-link.com/uk/support/download/archer-mr600/). Other
