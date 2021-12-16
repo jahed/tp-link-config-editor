@@ -2,9 +2,12 @@
 <html lang="en-GB">
 
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>TP-Link Router Config Editor</title>
+  <meta name="description"
+    content="A web interface to edit TP-Link Router Config export files (typically named config.bin).">
   <link rel="stylesheet" href="./index.css" type="text/css">
-</link>
 </head>
 
 <body>
@@ -18,13 +21,10 @@
     </div>
   </header>
   <main>
-    <textarea 
-        id="RESULT"
-        placeholder="Import your router configuration file (config.bin) to see it here. Make your changes, then export it back out.
+    <textarea id="RESULT" placeholder="Import your router configuration file (config.bin) to see it here. Make your changes, then export it back out.
 
 This editor is completely client-side. Your configuration is not sent anywhere so your passwords should be safe."
-        autocomplete="off"
-    ></textarea>
+      autocomplete="off"></textarea>
   </main>
   <footer>
     [ <a href="https://github.com/jahed/tp-link-config-editor">Source code</a> ]
