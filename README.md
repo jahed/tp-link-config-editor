@@ -13,7 +13,11 @@ While there are some safety nets, there's no guarantee your changes will work on
 your router. **Any damage caused by invalid configuration is your own
 responsibility!**
 
-Adapted from [tpconf_bin_xml](https://github.com/sta-c0000/tpconf_bin_xml).
+## Acknowledgements
+
+- [tpconf_bin_xml](https://github.com/sta-c0000/tpconf_bin_xml) - Config parsing.
+- [crypto-js](https://github.com/brix/crypto-js) - Encryption and hashing algorithms.
+- [Feather](https://github.com/feathericons/feather) - Favicon shape.
 
 ## License
 
