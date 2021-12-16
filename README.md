@@ -3,7 +3,7 @@
 A web interface to edit TP-Link Router Config export files (typically named
 `config.bin`).
 
-[Visit the website](https://jahed.github.io/tplink-config-editor).
+[Visit the website](https://jahed.github.io/tplink-config-editor/).
 
 Tested on an MR600v2. Other router models may be supported but use with caution.
 While there are some safety nets, there's no guarantee your changes will work on
