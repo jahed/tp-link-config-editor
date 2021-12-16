@@ -29,6 +29,10 @@ button {
   font-size: inherit;
 }
 
+a {
+  text-decoration: none;
+}
+
 header {
   display: flex;
   align-items: center;
@@ -52,7 +56,6 @@ header > div {
 
 main {
   flex-grow: 1;
-  margin-bottom: 16px;
 }
 
 textarea {
@@ -64,6 +67,12 @@ textarea {
   font-family: ui-monospace,"Cascadia Mono","Segoe UI Mono","Ubuntu Mono","Roboto Mono",Menlo,Monaco,Consolas,monospace;
   padding: 16px;
   margin: 0;
+}
+
+footer {
+  text-transform: uppercase;
+  font-size: 0.9em;
+  padding: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
