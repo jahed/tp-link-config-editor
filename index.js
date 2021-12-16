@@ -288,7 +288,7 @@ const decodeXML = (bytes) => {
   return bytesToText(bytes)
 }
 
-const exportXML = (xml) => {
+const exportXML = (xml, littleEndian) => {
   // TP-Link's Export does not wrap all values in quotes so it's not valid XML.
   // try {
   //   validateXML(xml)
@@ -297,8 +297,6 @@ const exportXML = (xml) => {
   //     throw error
   //   }
   // }
-
-  const littleEndian = true // TODO: store endian state during import
   const bytes = encodeXML(xml)
 
   const compressed = compress(bytes, littleEndian, false)
@@ -365,7 +363,10 @@ const decryptXMLCipher = async (cipherParams) => {
     throw new Error('Unrecognised config format.')
   }
 
-  return decodeXML(xml)
+  return {
+    xml: decodeXML(xml),
+    littleEndian
+  }
 }
 
 const decryptBase64XML = async (base64) => {
@@ -390,11 +391,13 @@ const importInput = document.getElementById("FILE")
 const exportButton = document.getElementById("EXPORT")
 const discardButton = document.getElementById("DISCARD")
 const resultTextArea = document.getElementById("RESULT")
+const littleEndianCheckbox = document.getElementById("LITTLE_ENDIAN")
 
 const handleImportEvent = async (file) => {
   try {
-    const result = await decryptXMLFile(file)
-    resultTextArea.value = result
+    const { xml, littleEndian } = await decryptXMLFile(file)
+    resultTextArea.value = xml
+    littleEndianCheckbox.checked = littleEndian
   } catch (error) {
     console.error('Failed to import configuration.', error)
     alert(`Failed to import configuration. ${error}`)
@@ -433,12 +436,15 @@ resultTextArea.addEventListener('dragover', async (e) => {
 
 exportButton.addEventListener('click', async () => {
   try {
-    const result = await exportXML(resultTextArea.value)
+    const result = await exportXML(resultTextArea.value, littleEndianCheckbox.checked)
 
     // Ensure result can be decrypted.
-    const xml = await decryptXMLCipher(result)
+    const { xml, littleEndian } = await decryptXMLCipher(result)
     if (xml !== resultTextArea.value) {
-      throw new Error('Export validation failed.')
+      throw new Error('Exported XML does not match editor.')
+    }
+    if (littleEndian !== littleEndianCheckbox.checked) {
+      throw new Error('Exported endianness does not match editor.')
     }
 
     const bytes = hexToBytes(result.ciphertext.toString(CryptoJS.enc.Hex))
