@@ -1,4 +1,4 @@
-import { equalArrays, getMD5, boolToBit, textToBytes, bytesToText, bytesToWordArray, wordArrayToBytes } from './bytes.js'
+import { boolToBit, bytesToDataView, bytesToText, bytesToWordArray, equalArrays, getMD5, textToBytes, wordArrayToBytes } from './bytes.js'
 
 const desKey = CryptoJS.enc.Hex.parse('478da50bf9e3d2cf')
 const desOptions = {
@@ -9,36 +9,36 @@ const desOptions = {
 const configFormats = [
   {
     name: 'Uncompressed',
-    test: config => bytesToText(config.slice(16, 21)) === '<?xml',
+    test: config => bytesToText(config.subarray(16, 21)) === '<?xml',
     extractXML: config => {
-      verify(config)
-      return config.slice(16)
+      verifyIntegrity(config)
+      return config.subarray(16)
     }
   },
   {
     name: 'W9970',
-    test: config => bytesToText(config.slice(20, 27)) === '<\0\0?xml',
+    test: config => bytesToText(config.subarray(20, 27)) === '<\0\0?xml',
     extractXML: (config, littleEndian) => {
-      verify(config)
-      const compressed = config.slice(16)
-      return uncompress(compressed, littleEndian)
+      verifyIntegrity(config)
+      const compressed = config.subarray(16)
+      return uncompressBytes(compressed, littleEndian)
     }
   },
   {
     name: 'W9980/W8980',
-    test: config => bytesToText(config.slice(22, 29)) === '<\0\0?xml',
+    test: config => bytesToText(config.subarray(22, 29)) === '<\0\0?xml',
     extractXML: (config, littleEndian) => {
-      const uncompressed = uncompress(config, littleEndian)
-      verify(uncompressed)
-      return uncompressed.slice(16)
+      const uncompressed = uncompressBytes(config, littleEndian)
+      verifyIntegrity(uncompressed)
+      return uncompressed.subarray(16)
     }
   },
   {
     name: 'AC1350',
-    test: config => bytesToText(config.slice(24, 31)) === '<\0\0?xml',
+    test: config => bytesToText(config.subarray(24, 31)) === '<\0\0?xml',
     extractXML: (config, littleEndian) => {
-      verify_ac1350(config, littleEndian)
-      return uncompress(config, littleEndian)
+      verifyIntegrityAC1350(config, littleEndian)
+      return uncompressBytes(config, littleEndian)
     }
   }
 ]
@@ -51,29 +51,29 @@ const getConfigFormat = (config) => {
   return configFormat
 }
 
-const verify = (bytes) => {
-  const integrity = bytes.slice(0, 16)
+const verifyIntegrity = (bytes) => {
+  const integrity = bytes.subarray(0, 16)
   for (let i = 0; i < 8; i++) {
-    const hash = bytes.slice(16, bytes.length - i)
-    if (!equalArrays(integrity, hash)) {
+    const hash = getMD5(bytes.subarray(16, bytes.length - i))
+    if (equalArrays(integrity, hash)) {
       return
     }
   }
   throw new Error('MD5 hash check failed.')
 }
 
-const verify_ac1350 = (bytes, littleEndian) => {
-  const integrity = bytes.slice(0, 16)
-  const dataView = new DataView(bytes.buffer)
+const verifyIntegrityAC1350 = (bytes, littleEndian) => {
+  const integrity = bytes.subarray(0, 16)
+  const dataView = bytesToDataView(bytes)
   const length = dataView.getUint16(16, littleEndian)
-  const hash = getMD5(bytes.slice(20, length))
+  const hash = getMD5(bytes.subarray(20, length))
   if (!equalArrays(integrity, hash)) {
     throw new Error('MD5 hash check failed.')
   }
 }
 
 const isLittleEndian = (bytes) => {
-  const dataView = new DataView(bytes.buffer)
+  const dataView = bytesToDataView(bytes)
   const littleEndian = true
   if (dataView.getUint16(0, littleEndian) > 0x20000) {
     if (dataView.getUint16(0, !littleEndian) > 0x20000) {
@@ -84,18 +84,18 @@ const isLittleEndian = (bytes) => {
   return littleEndian
 }
 
-const uncompress = (bytes, littleEndian) => {
-  const get_bit = () => {
-    if (block16_countdown) {
-      block16_countdown -= 1
+const uncompressBytes = (src, littleEndian) => {
+  const getBit = () => {
+    if (block16Countdown) {
+      block16Countdown -= 1
     } else {
-      block16_dict_bits = dataView.getUint16(s_p, littleEndian)
-      s_p += 2
-      block16_countdown = 0xF
+      block16DictBits = srcView.getUint16(srcP, littleEndian)
+      srcP += 2
+      block16Countdown = 0xF
     }
-    block16_dict_bits = block16_dict_bits << 1
+    block16DictBits = block16DictBits << 1
 
-    if (block16_dict_bits & 0x10000) {
+    if (block16DictBits & 0x10000) {
       return 1
     } else {
       // went past bit
@@ -103,64 +103,82 @@ const uncompress = (bytes, littleEndian) => {
     }
   }
 
-  const get_dict_ld = () => {
+  const getDictLD = () => {
     let bits = 1
     do {
-      bits = (bits << 1) + get_bit()
-    } while (get_bit())
+      bits = (bits << 1) + getBit()
+    } while (getBit())
     return bits
   }
 
-  const dataView = new DataView(bytes.buffer)
+  const srcView = bytesToDataView(src)
 
-  let block16_countdown = 0 // 16 byte blocks
-  let block16_dict_bits = 0 // bits for dictionnary bytes
+  let block16Countdown = 0 // 16 byte blocks
+  let block16DictBits = 0 // bits for dictionnary bytes
 
-  let size = dataView.getUint32(0, littleEndian)
+  let size = srcView.getUint32(0, littleEndian)
   let dst = new Uint8Array(size)
-  let s_p = 4
-  let d_p = 0
+  let srcP = 4
+  let dstP = 0
 
-  dst[d_p] = bytes[s_p]
-  s_p += 1
-  d_p += 1
+  dst[dstP] = src[srcP]
+  srcP += 1
+  dstP += 1
 
-  while (d_p < size) {
-    if (get_bit()) {
-      let num_chars = get_dict_ld() + 2
-      let msB = (get_dict_ld() - 2) << 8
-      let lsB = bytes[s_p]
-      s_p += 1
-      let offset = d_p - (lsB + 1 + msB)
-      for (let i = 0; i < num_chars; i += 1) {
+  while (dstP < size) {
+    if (getBit()) {
+      let charsCount = getDictLD() + 2
+      let msB = (getDictLD() - 2) << 8
+      let lsB = src[srcP]
+      srcP += 1
+      let offset = dstP - (lsB + 1 + msB)
+      for (let i = 0; i < charsCount; i += 1) {
         // 1 by 1 ∵ sometimes copying previously copied byte
-        dst[d_p] = dst[offset]
-        d_p += 1
+        dst[dstP] = dst[offset]
+        dstP += 1
         offset += 1
       }
     } else {
-      dst[d_p] = bytes[s_p]
-      s_p += 1
-      d_p += 1
+      dst[dstP] = src[srcP]
+      srcP += 1
+      dstP += 1
     }
   }
   return dst
 }
 
-const compress = (src, littleEndian, skiphits = false) => {
-  const put_bit = (bit) => {
-    if (block16_countdown) {
-      block16_countdown -= 1
-    } else {
-      dataView.setUint16(d_pb, block16_dict_bits, littleEndian)
-      d_pb = d_p
-      d_p += 2
-      block16_countdown = 0xF
+const createHashTable = (src) => {
+  const getHashKey = (offset) => {
+    let b4 = src.subarray(offset, offset + 4)
+    let hk = 0
+    for (let b of b4.subarray(0, 3)) {
+      hk = (hk + b) * 0x13d
     }
-    block16_dict_bits = (bit + (block16_dict_bits << 1)) & 0xFFFF
+    return ((hk + b4[3]) & 0x1FFF)
   }
 
-  const put_dict_ld = (bits) => {
+  const map = new Map()
+
+  return {
+    get: (srcP) => map.get(getHashKey(srcP)),
+    set: (srcPH) => map.set(getHashKey(srcPH), srcPH)
+  }
+}
+
+const compressBytes = (src, littleEndian, skiphits = false) => {
+  const putBit = (bit) => {
+    if (block16Countdown) {
+      block16Countdown -= 1
+    } else {
+      dstView.setUint16(dstPB, block16DictBits, littleEndian)
+      dstPB = dstP
+      dstP += 2
+      block16Countdown = 0xF
+    }
+    block16DictBits = (bit + (block16DictBits << 1)) & 0xFFFF
+  }
+
+  const putDictLD = (bits) => {
     let ldb = bits >> 1
     while (true) {
       let lb = (ldb - 1) & ldb
@@ -169,92 +187,83 @@ const compress = (src, littleEndian, skiphits = false) => {
       }
       ldb = lb
     }
-    put_bit(boolToBit((ldb & bits) > 0))
+    putBit(boolToBit((ldb & bits) > 0))
     ldb = ldb >> 1
     while (ldb) {
-      put_bit(1)
-      put_bit(boolToBit((ldb & bits) > 0))
+      putBit(1)
+      putBit(boolToBit((ldb & bits) > 0))
       ldb = ldb >> 1
     }
-    put_bit(0)
+    putBit(0)
   }
 
-  const hash_key = (offset) => {
-    let b4 = src.slice(offset, offset + 4)
-    let hk = 0
-    for (let b of b4.slice(0, 3)) {
-      hk = (hk + b) * 0x13d
-    }
-    return ((hk + b4[3]) & 0x1FFF)
-  }
-
-  const hash_table = new Map()
+  const hashTable = createHashTable(src)
   const size = src.length
 
-  const dst = new Uint8Array(0x8000)   // max compressed buffer size
-  const dataView = new DataView(dst.buffer)
+  const dst = new Uint8Array(0x8000) // max compressed buffer size
+  const dstView = bytesToDataView(dst)
 
-  let buffer_countdown = size
-  let block16_countdown = 0x10  // 16 byte blocks
-  let block16_dict_bits = 0     // bits for dictionnary bytes
+  dstView.setUint32(0, size, littleEndian)
+  dst[4] = src[0]
 
-  dataView.setUint32(0, size, littleEndian) // Store original size
-  dst[4] = src[0]                     // Copy first byte
-  buffer_countdown -= 1
-  let s_p = 1
-  let s_ph = 0
-  let d_pb = 5
-  let d_p = 7
+  let bufferCountdown = size - 1
+  let block16Countdown = 0x10 // 16 byte blocks
+  let block16DictBits = 0 // bits for dictionnary bytes
 
-  while (buffer_countdown > 4) {
-    while (s_ph < s_p) {
-      hash_table.set(hash_key(s_ph), s_ph)
-      s_ph += 1
+  let srcP = 1
+  let srcPH = 0
+  let dstPB = 5
+  let dstP = 7
+
+  while (bufferCountdown > 4) {
+    while (srcPH < srcP) {
+      hashTable.set(srcPH)
+      srcPH += 1
     }
-    let hit = hash_table.get(hash_key(s_p))
+    let hit = hashTable.get(srcP)
     let count = 0
     if (hit) {
       while (true) {
-        if (src[hit + count] !== src[s_p + count]) {
+        if (src[hit + count] !== src[srcP + count]) {
           break
         }
         count += 1
-        if (count === buffer_countdown) {
+        if (count === bufferCountdown) {
           break
         }
       }
-      if (count >= 4 || count === buffer_countdown) {
-        hit = s_p - hit - 1
-        put_bit(1)
-        put_dict_ld(count - 2)
-        put_dict_ld((hit >> 8) + 2)
-        dst[d_p] = hit & 0xFF
-        d_p += 1
-        buffer_countdown -= count
-        s_p += count
+      if (count >= 4 || count === bufferCountdown) {
+        hit = srcP - hit - 1
+        putBit(1)
+        putDictLD(count - 2)
+        putDictLD((hit >> 8) + 2)
+        dst[dstP] = hit & 0xFF
+        dstP += 1
+        bufferCountdown -= count
+        srcP += count
         if (skiphits) {
-          hash_table.set(hash_key(s_ph), s_ph)
-          s_ph += count
+          hashTable.set(srcPH)
+          srcPH += count
         }
         continue
       }
     }
-    put_bit(0)
-    dst[d_p] = src[s_p]
-    s_p += 1
-    d_p += 1
-    buffer_countdown -= 1
+    putBit(0)
+    dst[dstP] = src[srcP]
+    srcP += 1
+    dstP += 1
+    bufferCountdown -= 1
   }
 
-  while (buffer_countdown) {
-    put_bit(0)
-    dst[d_p] = src[s_p]
-    s_p += 1
-    d_p += 1
-    buffer_countdown -= 1
+  while (bufferCountdown) {
+    putBit(0)
+    dst[dstP] = src[srcP]
+    srcP += 1
+    dstP += 1
+    bufferCountdown -= 1
   }
-  dataView.setUint16(d_pb, (block16_dict_bits << block16_countdown) & 0xFFFF, littleEndian)
-  return dst.slice(0, d_p)
+  dstView.setUint16(dstPB, (block16DictBits << block16Countdown) & 0xFFFF, littleEndian)
+  return dst.slice(0, dstP)
 }
 
 const encodeXML = (xml) => {
@@ -274,46 +283,76 @@ const decodeXML = (bytes) => {
   return bytesToText(bytes)
 }
 
-export const encodeConfigToCipherParams = (xml, littleEndian) => {
-  const encodedXML = encodeXML(xml)
-  const compressedXML = compress(encodedXML, littleEndian, false)
-  const hash = getMD5(compressedXML)
-
-  const combinedSize = hash.length + compressedXML.length
-  const lengthPadding = combinedSize % 8 ? 8 - combinedSize % 8 : 0
-  const bin = new Uint8Array(combinedSize + lengthPadding)
-  bin.set(hash)
-  bin.set(compressedXML, hash.length)
-
-  return CryptoJS.DES.encrypt(
-    bytesToWordArray(bin),
-    desKey,
-    desOptions
+const encryptBytes = (bytes) => {
+  return wordArrayToBytes(
+    CryptoJS.DES.encrypt(
+      bytesToWordArray(bytes),
+      desKey,
+      desOptions
+    ).ciphertext
   )
 }
 
-export const decodeConfigFromCipherParams = async (cipherParams) => {
-  const plaintext = CryptoJS.DES.decrypt(cipherParams, desKey, desOptions)
-  const config = wordArrayToBytes(plaintext)
+const decryptBytes = (bytes) => {
+  return wordArrayToBytes(
+    CryptoJS.DES.decrypt(
+      CryptoJS.lib.CipherParams.create({
+        ciphertext: bytesToWordArray(bytes)
+      }),
+      desKey,
+      desOptions
+    )
+  )
+}
+
+const ensureEqualConfigs = (a, b) => {
+  if (a.xml !== b.xml) {
+    throw new Error('Exported XML does not match editor.')
+  }
+  if (a.littleEndian !== b.littleEndian) {
+    throw new Error('Exported endianness does not match editor.')
+  }
+}
+
+export const encodeConfig = async (config) => {
+  const encodedXML = encodeXML(config.xml)
+  const compressed = compressBytes(encodedXML, config.littleEndian, false)
+  const integrity = getMD5(compressed)
+
+  const combinedSize = integrity.length + compressed.length
+  const lengthPadding = combinedSize % 8 ? 8 - combinedSize % 8 : 0
+  const plainSize = combinedSize + lengthPadding
+
+  const plain = new Uint8Array(plainSize)
+  plain.set(integrity)
+  plain.set(compressed, integrity.length)
+
+  const encrypted = encryptBytes(plain)
+
+  const file = new File(
+    [encrypted.buffer],
+    "config.bin",
+    { type: 'application/octet-stream' }
+  )
+
+  ensureEqualConfigs(config, await decodeConfig(file))
+
+  return file
+}
+
+export const decodeConfig = async (file) => {
+  if (file.size % 8 !== 0) {
+    throw new Error(`Invalid config size. Must be multiple of 8. ${file.size}`)
+  }
+
+  const config = decryptBytes(new Uint8Array(await file.arrayBuffer()))
   const littleEndian = isLittleEndian(config)
   const configFormat = getConfigFormat(config)
-  const xml = decodeXML(configFormat.extractXML(config, littleEndian))
+  const encodedXML = configFormat.extractXML(config, littleEndian)
+  const xml = decodeXML(encodedXML)
   return {
     format: configFormat.name,
     littleEndian,
     xml
   }
-}
-
-export const decodeConfigFromFile = async (file) => {
-  if (file.size % 8 !== 0) {
-    throw new Error(`Invalid config size. Must be multiple of 8. ${file.size}`)
-  }
-
-  const buffer = await file.arrayBuffer()
-  const bytes = new Uint8Array(buffer)
-  const cipherParams = CryptoJS.lib.CipherParams.create({
-    ciphertext: bytesToWordArray(bytes)
-  })
-  return decodeConfigFromCipherParams(cipherParams)
 }

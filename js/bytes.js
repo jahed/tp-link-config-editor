@@ -1,3 +1,7 @@
+export const bytesToDataView = (bytes) => {
+  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+}
+
 export const bytesToWordArray = (bytes) => {
   const words = new Array(Math.ceil(bytes.length / 4))
   for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
