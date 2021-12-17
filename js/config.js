@@ -6,6 +6,9 @@ const desOptions = {
   padding: CryptoJS.pad.NoPadding
 }
 
+const maxCompressionSize = 0x8000
+const paddingLength = 8
+
 const configFormats = [
   {
     name: 'Uncompressed',
@@ -53,13 +56,14 @@ const getConfigFormat = (config) => {
 
 const verifyIntegrity = (bytes) => {
   const integrity = bytes.subarray(0, 16)
-  for (let i = 0; i < 8; i++) {
+  // Ignore any padding added after integrity was calculated.
+  for (let i = 0; i < paddingLength; i++) {
     const hash = getMD5(bytes.subarray(16, bytes.length - i))
     if (equalArrays(integrity, hash)) {
       return
     }
   }
-  throw new Error('MD5 hash check failed.')
+  throw new Error('Integrity check failed.')
 }
 
 const verifyIntegrityAC1350 = (bytes, littleEndian) => {
@@ -68,7 +72,7 @@ const verifyIntegrityAC1350 = (bytes, littleEndian) => {
   const length = dataView.getUint16(16, littleEndian)
   const hash = getMD5(bytes.subarray(20, length))
   if (!equalArrays(integrity, hash)) {
-    throw new Error('MD5 hash check failed.')
+    throw new Error('Integrity check failed.')
   }
 }
 
@@ -200,15 +204,15 @@ const compressBytes = (src, littleEndian, skiphits = false) => {
   const hashTable = createHashTable(src)
   const size = src.length
 
-  const dst = new Uint8Array(0x8000) // max compressed buffer size
+  const dst = new Uint8Array(maxCompressionSize)
   const dstView = bytesToDataView(dst)
 
   dstView.setUint32(0, size, littleEndian)
   dst[4] = src[0]
 
   let bufferCountdown = size - 1
-  let block16Countdown = 0x10 // 16 byte blocks
-  let block16DictBits = 0 // bits for dictionnary bytes
+  let block16Countdown = 0x10
+  let block16DictBits = 0
 
   let srcP = 1
   let srcPH = 0
@@ -262,8 +266,10 @@ const compressBytes = (src, littleEndian, skiphits = false) => {
     dstP += 1
     bufferCountdown -= 1
   }
+
   dstView.setUint16(dstPB, (block16DictBits << block16Countdown) & 0xFFFF, littleEndian)
-  return dst.slice(0, dstP)
+  
+  return dst.subarray(0, dstP)
 }
 
 const encodeXML = (xml) => {
@@ -314,13 +320,21 @@ const ensureEqualConfigs = (a, b) => {
   }
 }
 
+const ensureValidSize = (file) => {
+  if (file.size % paddingLength) {
+    throw new Error(`Invalid config size. Must be multiple of ${paddingLength}. ${file.size}`)
+  }
+}
+
 export const encodeConfig = async (config) => {
   const encodedXML = encodeXML(config.xml)
   const compressed = compressBytes(encodedXML, config.littleEndian, false)
   const integrity = getMD5(compressed)
 
   const combinedSize = integrity.length + compressed.length
-  const lengthPadding = combinedSize % 8 ? 8 - combinedSize % 8 : 0
+  const lengthPadding = combinedSize % paddingLength
+    ? paddingLength - combinedSize % paddingLength
+    : 0
   const plainSize = combinedSize + lengthPadding
 
   const plain = new Uint8Array(plainSize)
@@ -331,7 +345,7 @@ export const encodeConfig = async (config) => {
 
   const file = new File(
     [encrypted.buffer],
-    "config.bin",
+    'config.bin',
     { type: 'application/octet-stream' }
   )
 
@@ -341,10 +355,7 @@ export const encodeConfig = async (config) => {
 }
 
 export const decodeConfig = async (file) => {
-  if (file.size % 8 !== 0) {
-    throw new Error(`Invalid config size. Must be multiple of 8. ${file.size}`)
-  }
-
+  ensureValidSize(file)
   const config = decryptBytes(new Uint8Array(await file.arrayBuffer()))
   const littleEndian = isLittleEndian(config)
   const configFormat = getConfigFormat(config)
