@@ -1,0 +1,1298 @@
+<?xml version="1.0"?>
+<DslCpeConfig>
+  <InternetGatewayDevice>
+    <DeviceSummary val="InternetGatewayDevice:1.1[](Baseline:1, EthernetLAN:1)" />
+    <LANDeviceNumberOfEntries val=1 />
+    <DeviceInfo>
+      <ManufacturerOUI val=OUIVALUE />
+      <SerialNumber val=SERIALNUMBERVALUE />
+      <HardwareVersion val="Archer MR600 v2 00000001" />
+      <SoftwareVersion val="1.3.0 0.9.1 v0001.0 Build 210208 Rel.61056n" />
+      <UpTime val=1 />
+      <X_TP_IsFD val=3 />
+    </DeviceInfo>
+    <ManagementServer>
+      <PeriodicInformTime val=2021-12-01T00:00:00 />
+    </ManagementServer>
+    <X_TP_EthSwitch>
+      <EnableVirtualPorts val=1 />
+      <NumberOfVirtualPorts val=4 />
+      <IfName val=eth0 />
+    </X_TP_EthSwitch>
+    <X_TP_NetCfg>
+      <DNSServers val=100.0.0.0,100.0.0.1 />
+      <DNSifAliasName val=LTE />
+      <CurrDNSServer val=123456789 />
+    </X_TP_NetCfg>
+    <X_TP_UserCfg>
+      <AdminPwd val=ADMINPASSWORDVALUE />
+      <PwdSign val=1 />
+    </X_TP_UserCfg>
+    <X_TP_AppCfg>
+      <HttpCfg>
+        <HttpsLocalEnabled val=1 />
+        <CertExist val=1 />
+        <CertSerialNumber val=123456789 />
+        <CertAuth>
+          <Cert val="-----BEGIN CERTIFICATE-----
+ABCDEFGHI
+123456789
+-----END CERTIFICATE-----
+" />
+          <PrivateKey val="-----BEGIN RSA PRIVATE KEY-----
+ABCDEFGHI
+123456789
+-----END RSA PRIVATE KEY-----
+" />
+        </CertAuth>
+      </HttpCfg>
+      <DynDnsCfg>
+        <Server val=members.dyndns.org />
+      </DynDnsCfg>
+      <UPnPCfg>
+        <Enable val=1 />
+      </UPnPCfg>
+      <DiagnosticTool>
+        <CurrCommand val=3 />
+        <CurrHost val=100.0.0.1 />
+        <CurrHost6 val=::,:: />
+        <LastCommand val=3 />
+        <LastHost val=100.0.0.1 />
+        <LastHost6 val=::,:: />
+        <LastResult val=1 />
+      </DiagnosticTool>
+      <SnmpCfg>
+        <SysName val=",Archer MR600" />
+        <SysDescr val="1.2.0 0.9.1 v0001.0 Build 201203 Rel.59032n" />
+      </SnmpCfg>
+      <NoipDnsCfg>
+        <State val=3 />
+        <Server val=dynupdate.no-ip.com />
+      </NoipDnsCfg>
+      <ACL instance=1 >
+        <Enable val=1 />
+        <IPStart val=0.0.0.0 />
+        <IPEnd val=0.0.0.0 />
+        <Service val=Ping />
+        <Location val=Local />
+      </ACL>
+      <ACL nextInstance=2 />
+      <RebootScheduleCfg>
+        <Enable val=1 />
+        <Hours val=6 />
+        <Mode val=2 />
+        <Week val=0 />
+      </RebootScheduleCfg>
+      <LedScheduleCfg>
+        <Enable val=1 />
+        <EndTime val=480 />
+      </LedScheduleCfg>
+    </X_TP_AppCfg>
+    <Time>
+      <NTPServer1 val=time.cloudflare.com />
+      <NTPServer2 val=time.apple.com />
+      <CurrentLocalTime val=2021-12-01T00:00:00+00:00 />
+      <LocalTimeZone val=+00:00 />
+    </Time>
+    <Layer3Forwarding>
+      <__defaultGateway val=100.0.0.1 />
+      <__ifName val=wwan0 />
+      <__ifAliasName val=LTE />
+    </Layer3Forwarding>
+    <Layer2Bridging>
+      <BridgeNumberOfEntries val=1 />
+      <FilterNumberOfEntries val=10 />
+      <AvailableInterfaceNumberOfEntries val=10 />
+      <Bridge instance=1 >
+        <BridgeEnable val=1 />
+        <BridgeName val=Default />
+      </Bridge>
+      <Bridge nextInstance=2 />
+      <Filter instance=1 >
+        <FilterKey val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=eth0 />
+        <X_TP_IfAliasName val=LAN />
+      </Filter>
+      <Filter instance=2 >
+        <FilterKey val=2 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=eth0.2 />
+        <X_TP_IfAliasName val=LAN1 />
+      </Filter>
+      <Filter instance=3 >
+        <FilterKey val=3 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=eth0.3 />
+        <X_TP_IfAliasName val=LAN2 />
+      </Filter>
+      <Filter instance=4 >
+        <FilterKey val=4 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=eth0.4 />
+        <X_TP_IfAliasName val=LAN3 />
+      </Filter>
+      <Filter instance=5 >
+        <FilterKey val=5 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=eth0.5 />
+        <X_TP_IfAliasName val=LAN4 />
+      </Filter>
+      <Filter instance=6 >
+        <FilterKey val=6 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=ra0 />
+        <X_TP_IfAliasName val=WLAN1 />
+      </Filter>
+      <Filter instance=7 >
+        <FilterKey val=7 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=ra2 />
+        <X_TP_IfAliasName val=WLAN2 />
+      </Filter>
+      <Filter instance=8 >
+        <FilterKey val=8 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=rai0 />
+        <X_TP_IfAliasName val=WLAN10 />
+      </Filter>
+      <Filter instance=9 >
+        <FilterKey val=9 />
+        <FilterEnable val=1 />
+        <FilterBridgeReference val=0 />
+        <__filterBridgeRefName val=Default />
+        <FilterInterface val=rai2 />
+        <X_TP_IfAliasName val=WLAN11 />
+      </Filter>
+      <Filter nextInstance=10 />
+      <AvailableInterface instance=1 >
+        <AvailableInterfaceKey val=1 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_ETH_INTF#1,1 />
+      </AvailableInterface>
+      <AvailableInterface instance=2 >
+        <AvailableInterfaceKey val=2 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_ETH_INTF#1,2 />
+      </AvailableInterface>
+      <AvailableInterface instance=3 >
+        <AvailableInterfaceKey val=3 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_ETH_INTF#1,3 />
+      </AvailableInterface>
+      <AvailableInterface instance=4 >
+        <AvailableInterfaceKey val=4 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_ETH_INTF#1,4 />
+      </AvailableInterface>
+      <AvailableInterface instance=5 >
+        <AvailableInterfaceKey val=5 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_ETH_INTF#1,5 />
+      </AvailableInterface>
+      <AvailableInterface instance=6 >
+        <AvailableInterfaceKey val=6 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_WLAN#1,1 />
+      </AvailableInterface>
+      <AvailableInterface instance=7 >
+        <AvailableInterfaceKey val=7 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_WLAN_MSSIDENTRY#1,1,2 />
+      </AvailableInterface>
+      <AvailableInterface instance=8 >
+        <AvailableInterfaceKey val=8 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_WLAN#1,2 />
+      </AvailableInterface>
+      <AvailableInterface instance=9 >
+        <AvailableInterfaceKey val=9 />
+        <InterfaceType val=LANInterface />
+        <InterfaceReference val=LAN_WLAN_MSSIDENTRY#1,2,2 />
+      </AvailableInterface>
+      <AvailableInterface nextInstance=10 />
+    </Layer2Bridging>
+    <LANDevice instance=1 >
+      <LANEthernetInterfaceNumberOfEntries val=5 />
+      <LANWLANConfigurationNumberOfEntries val=1 />
+      <LANHostConfigManagement>
+        <DHCPServerEnable val=1 />
+        <MinAddress val=192.168.1.100 />
+        <MaxAddress val=192.168.1.199 />
+        <IPRouters val=192.168.1.1 />
+        <IPInterfaceNumberOfEntries val=1 />
+        <IPInterface instance=1 >
+          <Enable val=1 />
+          <__ifName val=br0 />
+        </IPInterface>
+        <IPInterface nextInstance=2 />
+      </LANHostConfigManagement>
+      <X_TP_LANIPv6HostConfigManagement>
+        <__ifName val=br0 />
+        <IPv6InterfaceNumberOfEntries val=1 />
+        <IPv6Interface instance=1 >
+          <Enable val=1 />
+          <__ifName val=br0 />
+        </IPv6Interface>
+        <IPv6Interface nextInstance=2 />
+      </X_TP_LANIPv6HostConfigManagement>
+      <LANEthernetInterfaceConfig instance=1 >
+        <__ifName val=eth0 />
+      </LANEthernetInterfaceConfig>
+      <LANEthernetInterfaceConfig instance=2 >
+        <Enable val=1 />
+        <__ifName val=eth0.2 />
+      </LANEthernetInterfaceConfig>
+      <LANEthernetInterfaceConfig instance=3 >
+        <Enable val=1 />
+        <__ifName val=eth0.3 />
+      </LANEthernetInterfaceConfig>
+      <LANEthernetInterfaceConfig instance=4 >
+        <Enable val=1 />
+        <__ifName val=eth0.4 />
+      </LANEthernetInterfaceConfig>
+      <LANEthernetInterfaceConfig instance=5 >
+        <Enable val=1 />
+        <__ifName val=eth0.5 />
+      </LANEthernetInterfaceConfig>
+      <LANEthernetInterfaceConfig nextInstance=6 />
+      <WLANConfiguration instance=1 >
+        <__apLastStatus val=3 />
+        <Enable val=1 />
+        <Name val=wlan0 />
+        <Channel val=11 />
+        <AutoChannelEnable val=1 />
+        <X_TP_PreSSID val=TP-Link />
+        <SSID val=SSIDVALUE1 />
+        <BeaconType val=11i />
+        <X_TP_MACAddressControlRule val=deny />
+        <X_TP_Band val=2.4GHz />
+        <X_TP_Bandwidth val=Auto />
+        <Standard val=n />
+        <WEPKeyIndex val=1 />
+        <BasicEncryptionModes val=None />
+        <BasicAuthenticationMode val=None />
+        <WPAEncryptionModes val=AESEncryption />
+        <WPAAuthenticationMode val=PSKAuthentication />
+        <IEEE11iEncryptionModes val=AESEncryption />
+        <IEEE11iAuthenticationMode val=PSKAuthentication />
+        <X_TP_PreSharedKey val=PASSWORDVALUE />
+        <SSIDAdvertisementEnabled val=1 />
+        <TransmitPower val=100 />
+        <RegulatoryDomain val="DE " />
+        <DeviceOperationMode val=InfrastructureAccessPoint />
+        <WMMEnable val=1 />
+        <X_TP_ShortGIEnable val=1 />
+        <WPS>
+          <DevicePassword val=123456789 />
+          <ConfigurationState val=Configured />
+        </WPS>
+        <WEPKey instance=1 >
+        </WEPKey>
+        <WEPKey instance=2 >
+        </WEPKey>
+        <WEPKey instance=3 >
+        </WEPKey>
+        <WEPKey instance=4 >
+        </WEPKey>
+        <WEPKey nextInstance=5 />
+        <X_TP_MultiSSID>
+          <MultiSSIDEnable val=1 />
+          <MultiSSIDEntry instance=1 >
+            <Enable val=1 />
+            <Name val=wlan1 />
+            <SSID val=SSIDVALUEGUEST />
+            <SSIDAdvertisementEnable val=1 />
+            <BeaconType val=11i />
+            <IsolateClients val=1 />
+            <WEPKeyIndex val=1 />
+            <BasicEncryptionModes val=None />
+            <BasicAuthenticationMode val=None />
+            <WPAEncryptionModes val=TKIPandAESEncryption />
+            <WPAAuthenticationMode val=PSKAuthentication />
+            <IEEE11iEncryptionModes val=AESEncryption />
+            <IEEE11iAuthenticationMode val=PSKAuthentication />
+            <PreSharedKey val=PASSWORD />
+            <RadiusServerPort val=1234 />
+            <WEPKey instance=1 >
+            </WEPKey>
+            <WEPKey instance=2 >
+            </WEPKey>
+            <WEPKey instance=3 >
+            </WEPKey>
+            <WEPKey instance=4 >
+            </WEPKey>
+            <WEPKey nextInstance=5 />
+          </MultiSSIDEntry>
+          <MultiSSIDEntry instance=2 >
+            <Enable val=1 />
+            <Name val=wlan2 />
+            <SSID val=SSIDVALUEMESH />
+            <BeaconType val=11i />
+            <WEPKeyIndex val=1 />
+            <BasicEncryptionModes val=None />
+            <BasicAuthenticationMode val=None />
+            <WPAEncryptionModes val=AESEncryption />
+            <WPAAuthenticationMode val=PSKAuthentication />
+            <IEEE11iEncryptionModes val=AESEncryption />
+            <IEEE11iAuthenticationMode val=PSKAuthentication />
+            <PreSharedKey val=PASSWORD />
+            <RadiusServerPort val=1234 />
+            <WEPKey instance=1 >
+            </WEPKey>
+            <WEPKey instance=2 >
+            </WEPKey>
+            <WEPKey instance=3 >
+            </WEPKey>
+            <WEPKey instance=4 >
+            </WEPKey>
+            <WEPKey nextInstance=5 />
+          </MultiSSIDEntry>
+          <MultiSSIDEntry nextInstance=3 />
+        </X_TP_MultiSSID>
+        <X_TP_WlBrName instance=1 >
+          <IfName val=ra0 />
+          <BridgeName val=br0 />
+        </X_TP_WlBrName>
+        <X_TP_WlBrName instance=2 >
+          <IfName val=ra2 />
+          <BridgeName val=br0 />
+        </X_TP_WlBrName>
+        <X_TP_WlBrName nextInstance=3 />
+        <X_TP_GuestNetwork>
+          <Enable val=1 />
+          <Name val=wlan1 />
+          <PreSSID val=TP-Link_Guest />
+          <EachOtherAccessEnable val=0 />
+          <TCMaxUpBW val=200 />
+          <TCMinUpBW val=100 />
+          <TCMaxDownBW val=200 />
+          <TCMinDownBW val=100 />
+          <TCRuleID val=1 />
+        </X_TP_GuestNetwork>
+      </WLANConfiguration>
+      <WLANConfiguration instance=2 >
+        <__apLastStatus val=3 />
+        <Enable val=1 />
+        <Name val=wlan5 />
+        <Channel val=40 />
+        <AutoChannelEnable val=1 />
+        <X_TP_PreSSID val=TP-Link />
+        <SSID val=SSIDVALUE2 />
+        <BeaconType val=11i />
+        <X_TP_MACAddressControlRule val=deny />
+        <X_TP_Band val=5GHz />
+        <X_TP_Bandwidth val=Auto />
+        <Standard val=ac />
+        <WEPKeyIndex val=1 />
+        <BasicEncryptionModes val=None />
+        <BasicAuthenticationMode val=None />
+        <WPAEncryptionModes val=AESEncryption />
+        <WPAAuthenticationMode val=PSKAuthentication />
+        <IEEE11iEncryptionModes val=AESEncryption />
+        <IEEE11iAuthenticationMode val=PSKAuthentication />
+        <X_TP_PreSharedKey val=PASSWORD />
+        <SSIDAdvertisementEnabled val=1 />
+        <TransmitPower val=50 />
+        <RegulatoryDomain val="DE " />
+        <DeviceOperationMode val=InfrastructureAccessPoint />
+        <WMMEnable val=1 />
+        <X_TP_ShortGIEnable val=1 />
+        <WPS>
+          <DevicePassword val=123456789 />
+          <ConfigurationState val=Configured />
+        </WPS>
+        <WEPKey instance=1 >
+        </WEPKey>
+        <WEPKey instance=2 >
+        </WEPKey>
+        <WEPKey instance=3 >
+        </WEPKey>
+        <WEPKey instance=4 >
+        </WEPKey>
+        <WEPKey nextInstance=5 />
+        <X_TP_MultiSSID>
+          <MultiSSIDEnable val=1 />
+          <MultiSSIDEntry instance=1 >
+            <Name val=wlan6 />
+            <SSID val=SSIDVALUEGUEST />
+            <SSIDAdvertisementEnable val=1 />
+            <BeaconType val=11i />
+            <IsolateClients val=1 />
+            <WEPKeyIndex val=1 />
+            <BasicEncryptionModes val=None />
+            <BasicAuthenticationMode val=None />
+            <WPAEncryptionModes val=TKIPandAESEncryption />
+            <WPAAuthenticationMode val=PSKAuthentication />
+            <IEEE11iEncryptionModes val=AESEncryption />
+            <IEEE11iAuthenticationMode val=PSKAuthentication />
+            <PreSharedKey val=PASSWORD />
+            <RadiusServerPort val=1234 />
+            <WEPKey instance=1 >
+            </WEPKey>
+            <WEPKey instance=2 >
+            </WEPKey>
+            <WEPKey instance=3 >
+            </WEPKey>
+            <WEPKey instance=4 >
+            </WEPKey>
+            <WEPKey nextInstance=5 />
+          </MultiSSIDEntry>
+          <MultiSSIDEntry instance=2 >
+            <Enable val=1 />
+            <Name val=wlan7 />
+            <SSID val=SSIDVALUEMESH />
+            <BeaconType val=11i />
+            <WEPKeyIndex val=1 />
+            <BasicEncryptionModes val=None />
+            <BasicAuthenticationMode val=None />
+            <WPAEncryptionModes val=AESEncryption />
+            <WPAAuthenticationMode val=PSKAuthentication />
+            <IEEE11iEncryptionModes val=AESEncryption />
+            <IEEE11iAuthenticationMode val=PSKAuthentication />
+            <PreSharedKey val=PASSWORD />
+            <RadiusServerPort val=1234 />
+            <WEPKey instance=1 >
+            </WEPKey>
+            <WEPKey instance=2 >
+            </WEPKey>
+            <WEPKey instance=3 >
+            </WEPKey>
+            <WEPKey instance=4 >
+            </WEPKey>
+            <WEPKey nextInstance=5 />
+          </MultiSSIDEntry>
+          <MultiSSIDEntry nextInstance=3 />
+        </X_TP_MultiSSID>
+        <X_TP_WlBrName instance=1 >
+          <IfName val=rai0 />
+          <BridgeName val=br0 />
+        </X_TP_WlBrName>
+        <X_TP_WlBrName instance=2 >
+          <IfName val=rai2 />
+          <BridgeName val=br0 />
+        </X_TP_WlBrName>
+        <X_TP_WlBrName nextInstance=3 />
+        <X_TP_GuestNetwork>
+          <Name val=wlan6 />
+          <PreSSID val=TP-Link_Guest />
+          <EachOtherAccessEnable val=0 />
+          <TCMaxUpBW val=200 />
+          <TCMinUpBW val=100 />
+          <TCMaxDownBW val=200 />
+          <TCMinDownBW val=100 />
+        </X_TP_GuestNetwork>
+      </WLANConfiguration>
+      <WLANConfiguration nextInstance=3 />
+      <WLANSyncConfig instance=1 >
+        <Enable val=1 />
+        <Name val=wlan0 />
+        <Channel val=6 />
+        <AutoChannelEnable val=1 />
+        <X_TP_PreSSID val=TP-Link />
+        <SSID val=SSIDVALUE />
+        <BeaconType val=11i />
+        <X_TP_MACAddressControlRule val=deny />
+        <X_TP_Band val=2.4GHz />
+        <X_TP_Bandwidth val=Auto />
+        <Standard val=n />
+        <WEPKeyIndex val=1 />
+        <BasicEncryptionModes val=None />
+        <BasicAuthenticationMode val=None />
+        <WPAEncryptionModes val=AESEncryption />
+        <WPAAuthenticationMode val=PSKAuthentication />
+        <IEEE11iEncryptionModes val=AESEncryption />
+        <IEEE11iAuthenticationMode val=PSKAuthentication />
+        <X_TP_PreSharedKey val=PASSWORD />
+        <SSIDAdvertisementEnabled val=1 />
+        <TransmitPower val=100 />
+        <RegulatoryDomain val="DE " />
+        <DeviceOperationMode val=InfrastructureAccessPoint />
+        <WMMEnable val=1 />
+        <X_TP_ShortGIEnable val=1 />
+        <WEPKey instance=1 >
+        </WEPKey>
+        <WEPKey instance=2 >
+        </WEPKey>
+        <WEPKey instance=3 >
+        </WEPKey>
+        <WEPKey instance=4 >
+        </WEPKey>
+        <WEPKey nextInstance=5 />
+      </WLANSyncConfig>
+      <WLANSyncConfig instance=2 >
+        <Enable val=1 />
+        <Name val=wlan5 />
+        <Channel val=40 />
+        <AutoChannelEnable val=1 />
+        <X_TP_PreSSID val=TP-Link />
+        <SSID val=SSIDVALUE />
+        <BeaconType val=11i />
+        <X_TP_MACAddressControlRule val=deny />
+        <X_TP_Band val=5GHz />
+        <X_TP_Bandwidth val=Auto />
+        <Standard val=ac />
+        <WEPKeyIndex val=1 />
+        <BasicEncryptionModes val=None />
+        <BasicAuthenticationMode val=None />
+        <WPAEncryptionModes val=AESEncryption />
+        <WPAAuthenticationMode val=PSKAuthentication />
+        <IEEE11iEncryptionModes val=AESEncryption />
+        <IEEE11iAuthenticationMode val=PSKAuthentication />
+        <X_TP_PreSharedKey val=PASSWORD />
+        <SSIDAdvertisementEnabled val=1 />
+        <TransmitPower val=50 />
+        <RegulatoryDomain val="DE " />
+        <DeviceOperationMode val=InfrastructureAccessPoint />
+        <WMMEnable val=1 />
+        <X_TP_ShortGIEnable val=1 />
+        <WEPKey instance=1 >
+        </WEPKey>
+        <WEPKey instance=2 >
+        </WEPKey>
+        <WEPKey instance=3 >
+        </WEPKey>
+        <WEPKey instance=4 >
+        </WEPKey>
+        <WEPKey nextInstance=5 />
+      </WLANSyncConfig>
+      <WLANSyncConfig nextInstance=3 />
+      <X_TP_LANIGMPSnoopConfig>
+        <Enabled val=0 />
+      </X_TP_LANIGMPSnoopConfig>
+    </LANDevice>
+    <LANDevice nextInstance=2 />
+    <WANDevice instance=1 >
+      <WANConnectionNumberOfEntries val=1 />
+      <WANCommonInterfaceConfig>
+        <EnabledForInternet val=1 />
+        <WANAccessType val=Ethernet />
+      </WANCommonInterfaceConfig>
+      <WANEthernetInterfaceConfig>
+        <X_TP_IfName val=eth1.5 />
+      </WANEthernetInterfaceConfig>
+      <WANConnectionDevice instance=1 >
+        <WANIPConnectionNumberOfEntries val=1 />
+        <WANEthernetLinkConfig>
+          <EthernetLinkStatus val=Down />
+          <X_TP_IfName val=eth1.5.0 />
+        </WANEthernetLinkConfig>
+        <X_TP_WANLTELinkConfig>
+          <WanCfg>
+          </WanCfg>
+        </X_TP_WANLTELinkConfig>
+        <WANIPConnection instance=1 >
+          <ConnectionType val=IP_Routed />
+          <Name val=ipoe_1_d />
+          <X_TP_ConnectionId val=1 />
+          <X_TP_Hostname val=,Archer_MR600 />
+          <AddressingType val=DHCP />
+          <ExternalIPAddress val=0.0.0.0 />
+          <SubnetMask val=0.0.0.0 />
+          <DefaultGateway val=0.0.0.0 />
+          <DNSServers val=0.0.0.0,0.0.0.0 />
+          <X_TP_IfName val=eth1.5.0 />
+          <X_TP_DefaultIPv6Gateway val=:: />
+          <X_TP_IPv6DNSServers val=::,:: />
+        </WANIPConnection>
+        <WANIPConnection nextInstance=2 />
+      </WANConnectionDevice>
+      <WANConnectionDevice nextInstance=2 />
+    </WANDevice>
+    <WANDevice instance=2 >
+      <WANCommonInterfaceConfig>
+        <EnabledForInternet val=1 />
+        <WANAccessType val=LTE />
+      </WANCommonInterfaceConfig>
+      <X_TP_LTEInterfaceConfig>
+        <DailyFlow val=123456789.0000 />
+        <CurrentDate val=123456789 />
+        <AutoDisconnect val=1 />
+        <WarningPercent val=90 />
+        <EnablePaymentDay val=1 />
+        <NextDue val=1639526400 />
+        <PaymentDay val=15 />
+        <AdjustStatistics val=123456789.5 />
+        <TotalStatistics val=123456789.0000 />
+      </X_TP_LTEInterfaceConfig>
+      <WANConnectionDevice instance=1 >
+        <WANIPConnectionNumberOfEntries val=1 />
+        <X_TP_WANLTELinkConfig>
+          <SimCardNumber val=00000000000 />
+          <SimCardType val=0 />
+          <SimCardState val=1 />
+          <SimCardImsi val=123456789 />
+          <SimCardGid1 val=eeff />
+          <SmsScAddress val=123456789 />
+          <IfName val=lte0 />
+          <LteNetStatus>
+            <RfInfoChannel val=1234 />
+            <RfInfoBand val=1234 />
+          </LteNetStatus>
+          <SimLock>
+            <Pin val=123456789 />
+            <NewPin val=123456789 />
+            <PinState val=2 />
+            <AutoUnlockPin val=1 />
+            <SimAction val=3 />
+          </SimLock>
+          <WanCfg>
+            <NetworkPreferredMode val=3 />
+            <ProfileName val=T-MOBILE />
+            <Ipv4Apn val= />
+            <Ipv4Username val= />
+            <Ipv4Password val= />
+            <Ipv6Apn val= />
+            <Ipv6Username val= />
+            <Ipv6Password val= />
+            <DefaultProfile val=3 />
+            <ProfStat>
+              <Spn val=EE />
+              <IspCount val=3 />
+              <IspMnc val=30 />
+              <IspMcc val=234 />
+              <IspName val=EE />
+              <UsrMnc val=30 />
+              <UsrMcc val=234 />
+            </ProfStat>
+            <IspProf instance=1 >
+              <PkgName val=EE />
+              <ProfName val=EE />
+              <Apn val=everywhere />
+              <Usr val=eesecure />
+              <Psw val=secure />
+              <AuthType val=2 />
+            </IspProf>
+            <IspProf instance=2 >
+              <PkgName val=T-MOBILE />
+              <ProfName val=T-MOBILE />
+              <IpVer val=2 />
+              <Apn val=general.t-mobile.uk />
+              <AuthType val=2 />
+            </IspProf>
+            <IspProf instance=3 >
+              <PkgName val="Asda Mobile" />
+              <ProfName val="Asda Mobile" />
+              <IpVer val=2 />
+              <Apn val=asdamobiles.co.uk />
+              <Usr val=web />
+              <Psw val=web />
+              <AuthType val=2 />
+            </IspProf>
+            <IspProf nextInstance=4 />
+            <Profile instance=1 >
+              <ProfileName val=EE />
+              <Ipv4Apn val=everywhere />
+              <Ipv4Username val=eesecure />
+              <Ipv4Password val=secure />
+              <Ipv4AuthType val=2 />
+            </Profile>
+            <Profile instance=2 >
+              <ProfileID val=1 />
+              <ProfileName val=T-MOBILE />
+              <PdpType val=2 />
+              <Ipv4Apn val=general.t-mobile.uk />
+              <Ipv4AuthType val=2 />
+            </Profile>
+            <Profile instance=3 >
+              <ProfileID val=2 />
+              <ProfileName val="Asda Mobile" />
+              <PdpType val=2 />
+              <Ipv4Apn val=asdamobiles.co.uk />
+              <Ipv4Username val=web />
+              <Ipv4Password val=web />
+              <Ipv4AuthType val=2 />
+            </Profile>
+            <Profile nextInstance=4 />
+          </WanCfg>
+          <TimeCfg>
+            <Year val=2021 />
+            <Month val=12 />
+            <Date val=01 />
+            <Hour val=0 />
+            <Minute val=0 />
+            <Second val=0 />
+            <Action val=2 />
+          </TimeCfg>
+        </X_TP_WANLTELinkConfig>
+        <WANIPConnection instance=1 >
+          <Enable val=1 />
+          <ConnectionType val=IP_Routed />
+          <Name val=LTE />
+          <X_TP_ConnectionId val=0 />
+          <X_TP_Hostname val=, />
+          <AddressingType val=DHCP />
+          <ExternalIPAddress val=100.0.0.1 />
+          <SubnetMask val=255.255.255.200 />
+          <DefaultGateway val=100.0.0.1 />
+          <DNSServers val=100.0.0.1,100.0.0.2 />
+          <X_TP_IfName val=wwan0 />
+          <X_TP_IPv6AddressingType val=SLAAC />
+          <X_TP_ExternalIPv6Address val=:: />
+          <X_TP_DefaultIPv6Gateway val=:: />
+          <X_TP_IPv6DNSServers val=::,:: />
+        </WANIPConnection>
+        <WANIPConnection nextInstance=2 />
+      </WANConnectionDevice>
+      <WANConnectionDevice nextInstance=2 />
+    </WANDevice>
+    <WANDevice nextInstance=3 />
+    <X_TP_StatCfg>
+      <X_TP_RecordCfg>
+        <HostName val=HOSTNAMEVALUE />
+        <RecordInterval val=Day />
+      </X_TP_RecordCfg>
+    </X_TP_StatCfg>
+    <X_TP_ARP>
+      <ArpBindTbl>
+        <ArpBindEntry instance=1 >
+          <State val=1 />
+          <Ip val=123456789 />
+          <Mac val=AA:BB:CC:DD:EE:FF />
+        </ArpBindEntry>
+        <ArpBindEntry nextInstance=3 />
+      </ArpBindTbl>
+    </X_TP_ARP>
+    <X_TP_TrafficControl>
+      <TCRuleNumberOfEntries val=1 />
+      <TCRule instance=1 >
+        <Id val=1 />
+        <Enable val=0 />
+        <Precedence val=5 />
+        <UpMinBW val=100 />
+        <UpMaxBW val=200 />
+        <DownMinBW val=100 />
+        <DownMaxBW val=200 />
+        <IfMark val=123456789 />
+        <IfName val=ra1 />
+        <RuleType val=1 />
+      </TCRule>
+      <TCRule nextInstance=4 />
+    </X_TP_TrafficControl>
+    <X_TP_Iqos>
+      <IqosConf instance=1 >
+        <Id val=1 />
+        <TcpPort val=22 />
+        <Type val=31 />
+        <AppName val=SSH />
+      </IqosConf>
+      <IqosConf instance=2 >
+        <Id val=2 />
+        <TcpPort val=23 />
+        <Type val=31 />
+        <AppName val=TELNET />
+      </IqosConf>
+      <IqosConf instance=3 >
+        <Id val=3 />
+        <TcpPort val=1723 />
+        <UdpPort val=1721 />
+        <Type val=33 />
+        <AppName val=VPN />
+      </IqosConf>
+      <IqosConf instance=4 >
+        <Id val=4 />
+        <TcpPort val=80 />
+        <Type val=31 />
+        <AppName val=WWW />
+      </IqosConf>
+      <IqosConf instance=5 >
+        <Id val=5 />
+        <TcpPort val=53 />
+        <UdpPort val=53 />
+        <Type val=33 />
+        <AppName val=DNS />
+      </IqosConf>
+      <IqosConf instance=6 >
+        <Id val=6 />
+        <Type val=34 />
+        <AppName val=ICMP />
+      </IqosConf>
+      <IqosConf instance=7 >
+        <Id val=7 />
+        <TcpPort val=119 />
+        <Type val=31 />
+        <AppName val=NNTP />
+      </IqosConf>
+      <IqosConf nextInstance=8 />
+    </X_TP_Iqos>
+    <X_TP_Firewall>
+      <FirewallMode val=1 />
+      <ParentCtrlMode val=1 />
+      <EnableUrlFilter val=0 />
+      <ExternalHost instance=1 >
+        <Type val=2 />
+        <EntryName val=blacklist />
+        <IsParentCtrl val=2 />
+        <AccessMode val=1 />
+        <PortStart val=80 />
+      </ExternalHost>
+      <ExternalHost instance=2 >
+        <Type val=2 />
+        <EntryName val=whitelist />
+        <IsParentCtrl val=2 />
+        <AccessMode val=0 />
+        <PortStart val=80 />
+      </ExternalHost>
+      <ExternalHost nextInstance=3 />
+      <UrlList>
+        <UrlCfg instance=1 >
+        </UrlCfg>
+        <UrlCfg instance=2 >
+        </UrlCfg>
+        <UrlCfg instance=3 >
+        </UrlCfg>
+        <UrlCfg instance=4 >
+        </UrlCfg>
+        <UrlCfg instance=5 >
+        </UrlCfg>
+        <UrlCfg instance=6 >
+        </UrlCfg>
+        <UrlCfg instance=7 >
+        </UrlCfg>
+        <UrlCfg instance=8 >
+        </UrlCfg>
+        <UrlCfg instance=9 >
+        </UrlCfg>
+        <UrlCfg instance=10 >
+        </UrlCfg>
+        <UrlCfg instance=11 >
+        </UrlCfg>
+        <UrlCfg instance=12 >
+        </UrlCfg>
+        <UrlCfg instance=13 >
+        </UrlCfg>
+        <UrlCfg instance=14 >
+        </UrlCfg>
+        <UrlCfg instance=15 >
+        </UrlCfg>
+        <UrlCfg instance=16 >
+        </UrlCfg>
+        <UrlCfg instance=17 >
+        </UrlCfg>
+        <UrlCfg instance=18 >
+        </UrlCfg>
+        <UrlCfg instance=19 >
+        </UrlCfg>
+        <UrlCfg instance=20 >
+        </UrlCfg>
+        <UrlCfg instance=21 >
+        </UrlCfg>
+        <UrlCfg instance=22 >
+        </UrlCfg>
+        <UrlCfg instance=23 >
+        </UrlCfg>
+        <UrlCfg instance=24 >
+        </UrlCfg>
+        <UrlCfg instance=25 >
+        </UrlCfg>
+        <UrlCfg instance=26 >
+        </UrlCfg>
+        <UrlCfg instance=27 >
+        </UrlCfg>
+        <UrlCfg instance=28 >
+        </UrlCfg>
+        <UrlCfg instance=29 >
+        </UrlCfg>
+        <UrlCfg instance=30 >
+        </UrlCfg>
+        <UrlCfg instance=31 >
+        </UrlCfg>
+        <UrlCfg instance=32 >
+        </UrlCfg>
+        <UrlCfg instance=33 >
+        </UrlCfg>
+        <UrlCfg instance=34 >
+        </UrlCfg>
+        <UrlCfg instance=35 >
+        </UrlCfg>
+        <UrlCfg instance=36 >
+        </UrlCfg>
+        <UrlCfg instance=37 >
+        </UrlCfg>
+        <UrlCfg instance=38 >
+        </UrlCfg>
+        <UrlCfg instance=39 >
+        </UrlCfg>
+        <UrlCfg instance=40 >
+        </UrlCfg>
+        <UrlCfg instance=41 >
+        </UrlCfg>
+        <UrlCfg instance=42 >
+        </UrlCfg>
+        <UrlCfg instance=43 >
+        </UrlCfg>
+        <UrlCfg instance=44 >
+        </UrlCfg>
+        <UrlCfg instance=45 >
+        </UrlCfg>
+        <UrlCfg instance=46 >
+        </UrlCfg>
+        <UrlCfg instance=47 >
+        </UrlCfg>
+        <UrlCfg instance=48 >
+        </UrlCfg>
+        <UrlCfg instance=49 >
+        </UrlCfg>
+        <UrlCfg instance=50 >
+        </UrlCfg>
+        <UrlCfg instance=51 >
+        </UrlCfg>
+        <UrlCfg instance=52 >
+        </UrlCfg>
+        <UrlCfg instance=53 >
+        </UrlCfg>
+        <UrlCfg instance=54 >
+        </UrlCfg>
+        <UrlCfg instance=55 >
+        </UrlCfg>
+        <UrlCfg instance=56 >
+        </UrlCfg>
+        <UrlCfg instance=57 >
+        </UrlCfg>
+        <UrlCfg instance=58 >
+        </UrlCfg>
+        <UrlCfg instance=59 >
+        </UrlCfg>
+        <UrlCfg instance=60 >
+        </UrlCfg>
+        <UrlCfg instance=61 >
+        </UrlCfg>
+        <UrlCfg instance=62 >
+        </UrlCfg>
+        <UrlCfg instance=63 >
+        </UrlCfg>
+        <UrlCfg instance=64 >
+        </UrlCfg>
+        <UrlCfg instance=65 >
+        </UrlCfg>
+        <UrlCfg instance=66 >
+        </UrlCfg>
+        <UrlCfg instance=67 >
+        </UrlCfg>
+        <UrlCfg instance=68 >
+        </UrlCfg>
+        <UrlCfg instance=69 >
+        </UrlCfg>
+        <UrlCfg instance=70 >
+        </UrlCfg>
+        <UrlCfg instance=71 >
+        </UrlCfg>
+        <UrlCfg instance=72 >
+        </UrlCfg>
+        <UrlCfg instance=73 >
+        </UrlCfg>
+        <UrlCfg instance=74 >
+        </UrlCfg>
+        <UrlCfg instance=75 >
+        </UrlCfg>
+        <UrlCfg instance=76 >
+        </UrlCfg>
+        <UrlCfg instance=77 >
+        </UrlCfg>
+        <UrlCfg instance=78 >
+        </UrlCfg>
+        <UrlCfg instance=79 >
+        </UrlCfg>
+        <UrlCfg instance=80 >
+        </UrlCfg>
+        <UrlCfg instance=81 >
+        </UrlCfg>
+        <UrlCfg instance=82 >
+        </UrlCfg>
+        <UrlCfg instance=83 >
+        </UrlCfg>
+        <UrlCfg instance=84 >
+        </UrlCfg>
+        <UrlCfg instance=85 >
+        </UrlCfg>
+        <UrlCfg instance=86 >
+        </UrlCfg>
+        <UrlCfg instance=87 >
+        </UrlCfg>
+        <UrlCfg instance=88 >
+        </UrlCfg>
+        <UrlCfg instance=89 >
+        </UrlCfg>
+        <UrlCfg instance=90 >
+        </UrlCfg>
+        <UrlCfg instance=91 >
+        </UrlCfg>
+        <UrlCfg instance=92 >
+        </UrlCfg>
+        <UrlCfg instance=93 >
+        </UrlCfg>
+        <UrlCfg instance=94 >
+        </UrlCfg>
+        <UrlCfg instance=95 >
+        </UrlCfg>
+        <UrlCfg instance=96 >
+        </UrlCfg>
+        <UrlCfg instance=97 >
+        </UrlCfg>
+        <UrlCfg instance=98 >
+        </UrlCfg>
+        <UrlCfg instance=99 >
+        </UrlCfg>
+        <UrlCfg instance=100 >
+        </UrlCfg>
+        <UrlCfg instance=101 >
+        </UrlCfg>
+        <UrlCfg instance=102 >
+        </UrlCfg>
+        <UrlCfg instance=103 >
+        </UrlCfg>
+        <UrlCfg instance=104 >
+        </UrlCfg>
+        <UrlCfg instance=105 >
+        </UrlCfg>
+        <UrlCfg instance=106 >
+        </UrlCfg>
+        <UrlCfg instance=107 >
+        </UrlCfg>
+        <UrlCfg instance=108 >
+        </UrlCfg>
+        <UrlCfg instance=109 >
+        </UrlCfg>
+        <UrlCfg instance=110 >
+        </UrlCfg>
+        <UrlCfg instance=111 >
+        </UrlCfg>
+        <UrlCfg instance=112 >
+        </UrlCfg>
+        <UrlCfg instance=113 >
+        </UrlCfg>
+        <UrlCfg instance=114 >
+        </UrlCfg>
+        <UrlCfg instance=115 >
+        </UrlCfg>
+        <UrlCfg instance=116 >
+        </UrlCfg>
+        <UrlCfg instance=117 >
+        </UrlCfg>
+        <UrlCfg instance=118 >
+        </UrlCfg>
+        <UrlCfg instance=119 >
+        </UrlCfg>
+        <UrlCfg instance=120 >
+        </UrlCfg>
+        <UrlCfg instance=121 >
+        </UrlCfg>
+        <UrlCfg instance=122 >
+        </UrlCfg>
+        <UrlCfg instance=123 >
+        </UrlCfg>
+        <UrlCfg instance=124 >
+        </UrlCfg>
+        <UrlCfg instance=125 >
+        </UrlCfg>
+        <UrlCfg instance=126 >
+        </UrlCfg>
+        <UrlCfg instance=127 >
+        </UrlCfg>
+        <UrlCfg instance=128 >
+        </UrlCfg>
+        <UrlCfg instance=129 >
+        </UrlCfg>
+        <UrlCfg instance=130 >
+        </UrlCfg>
+        <UrlCfg instance=131 >
+        </UrlCfg>
+        <UrlCfg instance=132 >
+        </UrlCfg>
+        <UrlCfg instance=133 >
+        </UrlCfg>
+        <UrlCfg instance=134 >
+        </UrlCfg>
+        <UrlCfg instance=135 >
+        </UrlCfg>
+        <UrlCfg instance=136 >
+        </UrlCfg>
+        <UrlCfg instance=137 >
+        </UrlCfg>
+        <UrlCfg instance=138 >
+        </UrlCfg>
+        <UrlCfg instance=139 >
+        </UrlCfg>
+        <UrlCfg instance=140 >
+        </UrlCfg>
+        <UrlCfg instance=141 >
+        </UrlCfg>
+        <UrlCfg instance=142 >
+        </UrlCfg>
+        <UrlCfg instance=143 >
+        </UrlCfg>
+        <UrlCfg instance=144 >
+        </UrlCfg>
+        <UrlCfg instance=145 >
+        </UrlCfg>
+        <UrlCfg instance=146 >
+        </UrlCfg>
+        <UrlCfg instance=147 >
+        </UrlCfg>
+        <UrlCfg instance=148 >
+        </UrlCfg>
+        <UrlCfg instance=149 >
+        </UrlCfg>
+        <UrlCfg instance=150 >
+        </UrlCfg>
+        <UrlCfg instance=151 >
+        </UrlCfg>
+        <UrlCfg instance=152 >
+        </UrlCfg>
+        <UrlCfg instance=153 >
+        </UrlCfg>
+        <UrlCfg instance=154 >
+        </UrlCfg>
+        <UrlCfg instance=155 >
+        </UrlCfg>
+        <UrlCfg instance=156 >
+        </UrlCfg>
+        <UrlCfg instance=157 >
+        </UrlCfg>
+        <UrlCfg instance=158 >
+        </UrlCfg>
+        <UrlCfg instance=159 >
+        </UrlCfg>
+        <UrlCfg instance=160 >
+        </UrlCfg>
+        <UrlCfg instance=161 >
+        </UrlCfg>
+        <UrlCfg instance=162 >
+        </UrlCfg>
+        <UrlCfg instance=163 >
+        </UrlCfg>
+        <UrlCfg instance=164 >
+        </UrlCfg>
+        <UrlCfg instance=165 >
+        </UrlCfg>
+        <UrlCfg instance=166 >
+        </UrlCfg>
+        <UrlCfg instance=167 >
+        </UrlCfg>
+        <UrlCfg instance=168 >
+        </UrlCfg>
+        <UrlCfg instance=169 >
+        </UrlCfg>
+        <UrlCfg instance=170 >
+        </UrlCfg>
+        <UrlCfg instance=171 >
+        </UrlCfg>
+        <UrlCfg instance=172 >
+        </UrlCfg>
+        <UrlCfg instance=173 >
+        </UrlCfg>
+        <UrlCfg instance=174 >
+        </UrlCfg>
+        <UrlCfg instance=175 >
+        </UrlCfg>
+        <UrlCfg instance=176 >
+        </UrlCfg>
+        <UrlCfg instance=177 >
+        </UrlCfg>
+        <UrlCfg instance=178 >
+        </UrlCfg>
+        <UrlCfg instance=179 >
+        </UrlCfg>
+        <UrlCfg instance=180 >
+        </UrlCfg>
+        <UrlCfg instance=181 >
+        </UrlCfg>
+        <UrlCfg instance=182 >
+        </UrlCfg>
+        <UrlCfg instance=183 >
+        </UrlCfg>
+        <UrlCfg instance=184 >
+        </UrlCfg>
+        <UrlCfg instance=185 >
+        </UrlCfg>
+        <UrlCfg instance=186 >
+        </UrlCfg>
+        <UrlCfg instance=187 >
+        </UrlCfg>
+        <UrlCfg instance=188 >
+        </UrlCfg>
+        <UrlCfg instance=189 >
+        </UrlCfg>
+        <UrlCfg instance=190 >
+        </UrlCfg>
+        <UrlCfg instance=191 >
+        </UrlCfg>
+        <UrlCfg instance=192 >
+        </UrlCfg>
+        <UrlCfg instance=193 >
+        </UrlCfg>
+        <UrlCfg instance=194 >
+        </UrlCfg>
+        <UrlCfg instance=195 >
+        </UrlCfg>
+        <UrlCfg instance=196 >
+        </UrlCfg>
+        <UrlCfg instance=197 >
+        </UrlCfg>
+        <UrlCfg instance=198 >
+        </UrlCfg>
+        <UrlCfg instance=199 >
+        </UrlCfg>
+        <UrlCfg instance=200 >
+        </UrlCfg>
+        <UrlCfg nextInstance=201 />
+      </UrlList>
+    </X_TP_Firewall>
+    <X_TP_IPv6Tunnel>
+      <Mechanism val=2 />
+      <AssociatedLanIfName val=br0 />
+    </X_TP_IPv6Tunnel>
+    <X_TP_SysMode>
+      <Mode val=LTE />
+    </X_TP_SysMode>
+    <X_TP_EWAN>
+      <Enable val=1 />
+      <IfName val=eth1.5 />
+    </X_TP_EWAN>
+    <X_TP_Local>
+      <Country val=GB />
+      <Language val=en_US />
+    </X_TP_Local>
+    <X_TP_CloudService>
+      <Alias val="Archer MR600" />
+      <FwUpgradeInfo>
+        <Status val=5 />
+      </FwUpgradeInfo>
+    </X_TP_CloudService>
+    <X_TP_VPN>
+      <OpenVPN>
+      </OpenVPN>
+      <PPTPVPN>
+      </PPTPVPN>
+    </X_TP_VPN>
+    <X_TP_OneMesh>
+      <Enable val=0 />
+      <Enabled val=0 />
+      <GroupID val=aaa-bbb-ccc-ddd-eee />
+      <SlaveAutoAttachNeeded val=1 />
+      <SlaveAutoJoinNeeded val=1 />
+      <MasterAutoProbeNeeded val=1 />
+      <MasterPri val=ABC123 />
+      <MasterRsaN val=ABC123 />
+      <MasterRsaE val=123456789 />
+    </X_TP_OneMesh>
+    <X_TP_Speedtest>
+      <Url val=http://www.speedtest.net/api/embed/tplink/config />
+    </X_TP_Speedtest>
+  </InternetGatewayDevice>
+</DslCpeConfig>
