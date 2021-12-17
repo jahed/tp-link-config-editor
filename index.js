@@ -1,39 +1,28 @@
-const validateXML = (xmlString) => {
-  const xml = new DOMParser().parseFromString(xmlString, 'text/xml');
-  const errorNode = xml.querySelector('parsererror')
-  if (errorNode) {
-    throw new Error(`Invalid XML. ${errorNode.textContent}`)
+const bytesToWordArray = (bytes) => {
+  const words = new Array(Math.ceil(bytes.length / 4))
+  for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
+    const byteIndex = wordIndex * 4
+    words[wordIndex] = ((((((((0
+      << 8) | bytes[byteIndex + 0])
+      << 8) | bytes[byteIndex + 1])
+      << 8) | bytes[byteIndex + 2])
+      << 8) | bytes[byteIndex + 3])
   }
+  return CryptoJS.lib.WordArray.create(words, bytes.length)
 }
 
-const bytesToHex = (bytes) => {
-  return [...bytes]
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-const blobToBase64 = (blob) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.addEventListener('error', () => {
-      reject(reader.error)
-    })
-
-    reader.addEventListener('load', () => {
-      resolve(reader.result.split(',', 2)[1])
-    })
-
-    reader.readAsDataURL(blob);
-  })
-}
-
-const hexToBytes = hex => {
-  const bytes = new Uint8Array(hex.length / 2)
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+const wordArrayToBytes = (wordArray) => {
+  const bytes = new Uint8Array(wordArray.sigBytes)
+  const words = wordArray.words
+  for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
+    const word = words[wordIndex]
+    const byteIndex = wordIndex * 4
+    bytes[byteIndex + 0] = (word >> 24) & 0xff
+    bytes[byteIndex + 1] = (word >> 16) & 0xff
+    bytes[byteIndex + 2] = (word >> 8) & 0xff
+    bytes[byteIndex + 3] = (word >> 0) & 0xff
   }
-  return bytes;
+  return bytes
 }
 
 const bytesToText = (bytes) => {
@@ -44,19 +33,27 @@ const textToBytes = (text) => {
   return new TextEncoder().encode(text)
 }
 
-const hexMD5 = (bytes) => {
-  return CryptoJS.MD5(
-    CryptoJS.enc.Hex.parse(
-      bytesToHex(bytes)
-    )
-  ).toString(CryptoJS.enc.Hex)
+const equalArrays = (a, b) => {
+  if (a.length !== b.length) {
+    return false
+  }
+  for (let i = 0; i < a.length; i += 1) {
+    if (a[i] !== b[i]) {
+      return false
+    }
+  }
+  return true
+}
+
+const getMD5 = (bytes) => {
+  return wordArrayToBytes(CryptoJS.MD5(bytesToWordArray(bytes)))
 }
 
 const verify = (bytes) => {
-  const integrity = bytesToHex(bytes.slice(0, 16))
+  const integrity = bytes.slice(0, 16)
   for (let i = 0; i < 8; i++) {
-    const hash = hexMD5(bytes.slice(16, bytes.length - i))
-    if (integrity === hash) {
+    const hash = bytes.slice(16, bytes.length - i)
+    if (!equalArrays(integrity, hash)) {
       return
     }
   }
@@ -64,11 +61,11 @@ const verify = (bytes) => {
 }
 
 const verify_ac1350 = (bytes, littleEndian) => {
-  const integrity = bytesToHex(bytes.slice(0, 16))
-
+  const integrity = bytes.slice(0, 16)
   const dataView = new DataView(bytes.buffer)
   const length = dataView.getUint16(16, littleEndian)
-  if (integrity != hexMD5(bytes.slice(20, length))) {
+  const hash = getMD5(bytes.slice(20, length))
+  if (!equalArrays(integrity, hash)) {
     throw new Error('MD5 hash check failed.')
   }
 }
@@ -78,7 +75,7 @@ const isLittleEndian = (bytes) => {
   const littleEndian = true
   if (dataView.getUint16(0, littleEndian) > 0x20000) {
     if (dataView.getUint16(0, !littleEndian) > 0x20000) {
-      throw new Error('Compressed file size too large.')
+      throw new Error('Config size is too large.')
     }
     return !littleEndian
   }
@@ -288,98 +285,95 @@ const decodeXML = (bytes) => {
   return bytesToText(bytes)
 }
 
-const exportXML = (xml, littleEndian) => {
-  // TP-Link's Export does not wrap all values in quotes so it's not valid XML.
-  // try {
-  //   validateXML(xml)
-  // } catch (error) {
-  //   if(!confirm('Your configuration looks invalid. Continue exporting?')) {
-  //     throw error
-  //   }
-  // }
-  const bytes = encodeXML(xml)
+const encodeConfigToCipherParams = (xml, littleEndian) => {
+  const encodedXML = encodeXML(xml)
+  const compressedXML = compress(encodedXML, littleEndian, false)
+  const hash = getMD5(compressedXML)
 
-  const compressed = compress(bytes, littleEndian, false)
+  const combinedSize = hash.length + compressedXML.length
+  const lengthPadding = combinedSize % 8 ? 8 - combinedSize % 8 : 0
+  const bin = new Uint8Array(combinedSize + lengthPadding)
+  bin.set(hash)
+  bin.set(compressedXML, hash.length)
 
-  const hash = hexMD5(compressed)
-  const hashBytes = hexToBytes(hash)
-
-  const combinedSize = hashBytes.length + compressed.length
-  const padding = combinedSize % 8 ? 8 - combinedSize % 8 : 0
-  const bin = new Uint8Array(combinedSize + padding)
-  bin.set(hashBytes)
-  bin.set(compressed, hashBytes.length)
-
-  // Returns CipherParams
   return CryptoJS.DES.encrypt(
-    CryptoJS.enc.Hex.parse(bytesToHex(bin)),
-    key,
-    {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.NoPadding
-    }
+    bytesToWordArray(bin),
+    desKey,
+    desOptions
   )
 }
 
-const decryptXMLCipher = async (cipherParams) => {
-  const plaintext = CryptoJS.DES.decrypt(
-    cipherParams,
-    key,
-    {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.NoPadding
-    }
-  )
-  const hex = plaintext.toString(CryptoJS.enc.Hex)
-  const bytes = hexToBytes(hex)
+const decodeConfigFromCipherParams = async (cipherParams) => {
+  const plaintext = CryptoJS.DES.decrypt(cipherParams, desKey, desOptions)
+  const config = wordArrayToBytes(plaintext)
+  const littleEndian = isLittleEndian(config)
 
-  const littleEndian = isLittleEndian(bytes)
-
-  let xml
-  if (bytesToText(bytes.slice(16, 21)) === '<?xml') {
-    console.log({ format: 'Uncompressed' })
-    verify(bytes)
-    xml = bytes.slice(16)
-  } else if (bytesToText(bytes.slice(20, 27)) === '<\0\0?xml') {
-    console.log({ format: 'W9970' })
-    verify(bytes)
-    const compressed = bytes.slice(16)
-    xml = uncompress(compressed, littleEndian)
-  } else if (bytesToText(bytes.slice(22, 29)) === '<\0\0?xml') {
-    console.log({ format: 'W9980/W8980' })
-    const uncompressed = uncompress(bytes, littleEndian)
-    verify(uncompressed)
-    xml = uncompressed.slice(16)
-  } else if (bytesToText(bytes.slice(24, 31)) === '<\0\0?xml') {
-    console.log({ format: 'AC1350' })
-    verify_ac1350(bytes, littleEndian)
-    xml = uncompress(bytes, littleEndian)
-  } else {
+  const configFormat = configFormats.find(cf => cf.test(config))
+  if (!configFormat) {
     throw new Error('Unrecognised config format.')
   }
+  console.log({ configFormat: configFormat.name })
 
-  return {
-    xml: decodeXML(xml),
-    littleEndian
-  }
+  const xmlBytes = configFormat.extractXML(config, littleEndian)
+  const xml = decodeXML(xmlBytes)
+  return { xml, littleEndian }
 }
 
-const decryptBase64XML = async (base64) => {
-  return decryptXMLCipher(CryptoJS.lib.CipherParams.create({ ciphertext: base64 }))
-}
-
-const decryptXMLFile = async (file) => {
+const decodeConfigFromFile = async (file) => {
   if (file.size % 8 !== 0) {
-    throw new Error(`Incorrect file size. ${file.size}`)
+    throw new Error(`Invalid config size. Must be multiple of 8. ${file.size}`)
   }
 
-  const raw = await blobToBase64(file, 'readAsDataURL')
-  const base64 = CryptoJS.enc.Base64.parse(raw)
-
-  return decryptBase64XML(base64)
+  const buffer = await file.arrayBuffer()
+  const bytes = new Uint8Array(buffer)
+  const cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: bytesToWordArray(bytes)
+  })
+  return decodeConfigFromCipherParams(cipherParams)
 }
 
-const key = CryptoJS.enc.Hex.parse('478da50bf9e3d2cf')
+const configFormats = [
+  {
+    name: 'Uncompressed',
+    test: config => bytesToText(config.slice(16, 21)) === '<?xml',
+    extractXML: config => {
+      verify(config)
+      return config.slice(16)
+    }
+  },
+  {
+    name: 'W9970',
+    test: config => bytesToText(config.slice(20, 27)) === '<\0\0?xml',
+    extractXML: (config, littleEndian) => {
+      verify(config)
+      const compressed = config.slice(16)
+      return uncompress(compressed, littleEndian)
+    }
+  },
+  {
+    name: 'W9980/W8980',
+    test: config => bytesToText(config.slice(22, 29)) === '<\0\0?xml',
+    extractXML: (config, littleEndian) => {
+      const uncompressed = uncompress(config, littleEndian)
+      verify(uncompressed)
+      return uncompressed.slice(16)
+    }
+  },
+  {
+    name: 'AC1350',
+    test: config => bytesToText(config.slice(24, 31)) === '<\0\0?xml',
+    extractXML: (config, littleEndian) => {
+      verify_ac1350(config, littleEndian)
+      return uncompress(config, littleEndian)
+    }
+  }
+]
+
+const desKey = CryptoJS.enc.Hex.parse('478da50bf9e3d2cf')
+const desOptions = {
+  mode: CryptoJS.mode.ECB,
+  padding: CryptoJS.pad.NoPadding
+}
 
 const importButton = document.getElementById("IMPORT")
 const importInput = document.getElementById("FILE")
@@ -389,12 +383,12 @@ const littleEndianCheckbox = document.getElementById("LITTLE_ENDIAN")
 
 const handleImportEvent = async (file) => {
   try {
-    const { xml, littleEndian } = await decryptXMLFile(file)
+    const { xml, littleEndian } = await decodeConfigFromFile(file)
     resultTextArea.value = xml
     littleEndianCheckbox.checked = littleEndian
   } catch (error) {
-    console.error('Failed to import configuration.', error)
-    alert(`Failed to import configuration. ${error}`)
+    console.error('Failed to import config.', error)
+    alert(`Failed to import config. ${error}`)
   }
 }
 
@@ -419,10 +413,9 @@ resultTextArea.addEventListener('dragover', async (e) => {
 
 exportButton.addEventListener('click', async () => {
   try {
-    const result = await exportXML(resultTextArea.value, littleEndianCheckbox.checked)
+    const cipherParams = await encodeConfigToCipherParams(resultTextArea.value, littleEndianCheckbox.checked)
 
-    // Ensure result can be decrypted.
-    const { xml, littleEndian } = await decryptXMLCipher(result)
+    const { xml, littleEndian } = await decodeConfigFromCipherParams(cipherParams)
     if (xml !== resultTextArea.value) {
       throw new Error('Exported XML does not match editor.')
     }
@@ -430,13 +423,13 @@ exportButton.addEventListener('click', async () => {
       throw new Error('Exported endianness does not match editor.')
     }
 
-    const bytes = hexToBytes(result.ciphertext.toString(CryptoJS.enc.Hex))
-    const file = new File([bytes.buffer], "config.bin", { type: 'application/octet-stream' })
+    const config = wordArrayToBytes(cipherParams.ciphertext)
+    const file = new File([config.buffer], "config.bin", { type: 'application/octet-stream' })
     const url = URL.createObjectURL(file)
-    window.open(url)
     setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    window.open(url)
   } catch (error) {
-    console.error('Failed to export configuration.', error)
-    alert(`Failed to export configuration. ${error}`)
+    console.error('Failed to export config.', error)
+    alert(`Failed to export config. ${error}`)
   }
 })
