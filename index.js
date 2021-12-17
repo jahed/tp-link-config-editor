@@ -332,30 +332,25 @@ const decryptXMLCipher = async (cipherParams) => {
   )
   const hex = plaintext.toString(CryptoJS.enc.Hex)
   const bytes = hexToBytes(hex)
-  const text = bytesToText(bytes)
-
-  if (!text) {
-    throw new Error('Decryption failed.')
-  }
 
   const littleEndian = isLittleEndian(bytes)
 
   let xml
-  if (text.substring(16, 21) === '<?xml') {
+  if (bytesToText(bytes.slice(16, 21)) === '<?xml') {
     console.log({ format: 'Uncompressed' })
     verify(bytes)
     xml = bytes.slice(16)
-  } else if (text.substring(20, 27) === '<\0\0?xml') {
+  } else if (bytesToText(bytes.slice(20, 27)) === '<\0\0?xml') {
     console.log({ format: 'W9970' })
     verify(bytes)
     const compressed = bytes.slice(16)
     xml = uncompress(compressed, littleEndian)
-  } else if (text.substring(22, 29) === '<\0\0?xml') {
+  } else if (bytesToText(bytes.slice(22, 29)) === '<\0\0?xml') {
     console.log({ format: 'W9980/W8980' })
     const uncompressed = uncompress(bytes, littleEndian)
     verify(uncompressed)
     xml = uncompressed.slice(16)
-  } else if (text.substring(24, 31) === '<\0\0?xml') {
+  } else if (bytesToText(bytes.slice(24, 31)) === '<\0\0?xml') {
     console.log({ format: 'AC1350' })
     verify_ac1350(bytes, littleEndian)
     xml = uncompress(bytes, littleEndian)
