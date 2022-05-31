@@ -3,8 +3,6 @@
 A web interface to edit TP-Link Router Config export files (typically named
 `config.bin`).
 
-[Visit the website](https://jahed.github.io/tp-link-config-editor/).
-
 Tested on an
 [MR600v2](https://www.tp-link.com/uk/support/download/archer-mr600/). Other
 router models may be supported but use with caution.
@@ -12,6 +10,9 @@ router models may be supported but use with caution.
 While there are some safety nets, there's no guarantee your changes will work on
 your router. **Any damage caused by invalid configuration is your own
 responsibility!**
+
+- [Visit the website.](https://jahed.github.io/tp-link-config-editor/)
+- [Read the blog post.](https://jahed.dev/2021/12/21/creating-a-tp-link-router-backup-editor-for-the-web/)
 
 ## Acknowledgements
 
